@@ -71,13 +71,12 @@ var actionProcessor = function(api, next){
     api.stats.increment('actions:actionsCurrentlyProcessing', -1);
     self.duration = new Date().getTime() - self.actionStartTime;
 
-    self.connection._original_connection.action = self.connection.action;
-    self.connection._original_connection.actionStatus = status;
-    self.connection._original_connection.error = self.connection.error;
-    self.connection._original_connection.response = self.connection.response || {};
-
     if(typeof self.callback == 'function'){
       process.nextTick(function(){
+        self.connection._original_connection.action = self.connection.action;
+        self.connection._original_connection.actionStatus = status;
+        self.connection._original_connection.error = self.connection.error;
+        self.connection._original_connection.response = self.connection.response || {};
         self.callback(self.connection._original_connection, toRender, self.messageCount);
       });
     }
